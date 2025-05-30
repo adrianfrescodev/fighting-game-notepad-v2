@@ -1,3 +1,3 @@
 export default function CharacterPortrait() {
-    return <div>hey</div>
+  return <div>hey</div>;
 }

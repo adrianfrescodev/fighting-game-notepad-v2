@@ -19,7 +19,7 @@ export default {
       },
       fontFamily: {
         sans: ['"Franklin Gothic Medium"', 'Arial Narrow', 'Arial', 'sans-serif'],
-      }
+      },
     },
   },
   plugins: [typography],
