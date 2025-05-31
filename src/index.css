@@ -27,3 +27,6 @@
   @apply prose prose-sm sm:prose lg:prose-lg max-w-none;
   @apply text-text h-full outline-none;
 }
+.tiptap.ProseMirror p:first-child {
+  margin-top: 0 !important;
+}

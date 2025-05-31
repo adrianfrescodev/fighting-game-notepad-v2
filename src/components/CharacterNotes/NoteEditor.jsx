@@ -18,13 +18,21 @@ function NoteBubbleMenu({ editor }) {
         onChange={e => editor.chain().focus().setFontSize(e.target.value).run()}
         defaultValue=""
       >
-        <option value="" disabled>
+        <option className="bg-card" value="" disabled>
           Font size
         </option>
-        <option value="12px">12px</option>
-        <option value="16px">16px</option>
-        <option value="20px">20px</option>
-        <option value="24px">24px</option>
+        <option className="bg-card" value="12px">
+          12px
+        </option>
+        <option className="bg-card" value="16px">
+          16px
+        </option>
+        <option className="bg-card" value="20px">
+          20px
+        </option>
+        <option className="bg-card" value="24px">
+          24px
+        </option>
       </select>
 
       <button
@@ -48,13 +56,15 @@ export default function NoteEditor({ section, value, onChange }) {
 
   if (!editor) return null;
   return (
-    <div className="bg-card flex h-full flex-1 flex-col overflow-x-auto rounded border px-3 py-2">
-      <NoteBubbleMenu editor={editor} />
-      <div className="text-text text-center">{section}</div>
+    <div className="animate-in fade-in border-accent-hover bg-tile flex flex-1 resize-none flex-col overflow-x-hidden rounded-lg border p-1 shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-all duration-300 ease-in">
+      <div className="text-text border-border border-b-1 text-center">
+        {section.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+      </div>
       <EditorContent
         editor={editor}
-        className="editor-container text-text h-full w-full cursor-text"
+        className="editor-container text-text mt-0 flex-1 overflow-x-hidden overflow-y-auto bg-transparent p-3 pr-1 text-base leading-1.5 break-words"
       />
+      <NoteBubbleMenu editor={editor} />
     </div>
   );
 }
