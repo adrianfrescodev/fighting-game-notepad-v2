@@ -6,17 +6,23 @@ function useCharacterNotes(name) {
     combos: '',
     'key-moves': '',
   };
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const [notes, setNotes] = useState(noteTemplate);
 
   useEffect(() => {
     const loaded = loadNotes();
-    setNotes(loaded);
+    if (loaded) {
+      setNotes(loaded);
+    }
+    setHasLoaded(true);
     // eslint-disable-next-line
   }, [name]);
 
   useEffect(() => {
-    saveNotes();
+    if (hasLoaded) {
+      saveNotes();
+    }
     // eslint-disable-next-line
   }, [notes]);
 
@@ -25,7 +31,7 @@ function useCharacterNotes(name) {
   }
   function loadNotes() {
     const charnotes = localStorage.getItem(`notes-${name}`);
-    return charnotes ? JSON.parse(charnotes) : noteTemplate;
+    return charnotes ? JSON.parse(charnotes) : null;
   }
   function updateNotes(section, newContent) {
     setNotes(prev => ({

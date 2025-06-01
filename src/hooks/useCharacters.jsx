@@ -40,8 +40,9 @@ function useCharacters() {
 
   const addCharacter = newName => {
     const trimmed = newName.trim().toLowerCase();
-    if (!trimmed || characters.includes(trimmed)) return;
+    if (!trimmed || characters.includes(trimmed)) return false;
     setCharacters([...characters, trimmed]);
+    return true;
   };
 
   return { characters, addCharacter };

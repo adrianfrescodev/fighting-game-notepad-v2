@@ -4,6 +4,7 @@ import { BubbleMenu } from '@tiptap/react';
 import Color from '@tiptap/extension-color';
 import FontSize from '../../styles/fontsize';
 
+import { useEffect } from 'react';
 function NoteBubbleMenu({ editor }) {
   if (!editor) return null;
   return (
@@ -53,7 +54,11 @@ export default function NoteEditor({ section, value, onChange }) {
       onChange(editor.getHTML());
     },
   });
-
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [editor, value]);
   if (!editor) return null;
   return (
     <div className="animate-in fade-in border-accent-hover bg-tile flex flex-1 resize-none flex-col overflow-x-hidden rounded-lg border p-1 shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-all duration-300 ease-in">
