@@ -1,29 +1,51 @@
 import express from 'express';
 import Character from '../models/Character.js';
+import verifyToken from '../Auth/verifyUser.js';
+import admin from '../firebase.js';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const notes = await Character.find();
-    res.status(200).json(notes);
+    let userId = null;
+
+    const token = req.headers.authorization?.split('Bearer ')[1];
+
+    try {
+      const decoded = await admin.auth().verifyIdToken(token);
+      userId = decoded.uid;
+    } catch (err) {
+      console.warn('Invalid token:', err.message);
+    }
+    const characters = await Character.find({
+      $or: [{ user: null }, ...(userId ? [{ user: userId }] : [])],
+    });
+
+    res.status(200).json(characters);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching characters' });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   try {
-    const newCharacter = new Character({ name: req.body.name });
-    const savedNote = await newCharacter.save();
-    res.status(201).json(savedNote);
+    const userId = req.user.uid;
+    const { name } = req.body;
+    const newCharacter = new Character({ name, user: userId });
+    const savedCharacter = await newCharacter.save();
+    res.status(201).json(savedCharacter);
   } catch (err) {
-    res.status(500).json({ message: 'Error creating character' });
+    console.error('Character creation error:', err.message);
+    res.status(500).json({ message: 'Error creating character', error: err.message });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   try {
-    await Character.findByIdAndDelete(req.params.id);
+    const userId = req.user.uid;
+    const character = await Character.findById(req.params.id);
+    if (character.user?.toString() === userId) {
+      await character.deleteOne();
+    }
     res.status(200).json({ message: 'Character deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Error deleting character' });

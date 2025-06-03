@@ -5,7 +5,7 @@ const noteSchema = new mongoose.Schema(
     character: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Character',
-      required: 'true',
+      required: true,
     },
     sections: {
       type: Map,
@@ -15,6 +15,10 @@ const noteSchema = new mongoose.Schema(
         'key-moves': '',
         combos: '',
       }),
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
   },
   { timestamps: true }

@@ -36,3 +36,10 @@ server/dist/
 *.njsproj
 *.sln
 *.sw?
+
+# Local Firebase emulators 
+.firebase/
+
+# Firebase Admin SDK service account
+server/serviceAccountKey.json
+
