@@ -4,9 +4,11 @@ import Grid from '../components/CharacterGrid/CharacterGrid';
 import useCharacters from '../hooks/useCharacters';
 import { useState } from 'react';
 import CharacterMaker from '../components/CharacterGrid/CharacterMaker';
+import { useAuth } from '../context/AuthContext';
 export default function Home() {
   const { characters, addCharacter } = useCharacters();
   const [isCreate, setIsCreate] = useState(false);
+  const { loggedIn } = useAuth();
   return (
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
       <div className="bg-card from-white/3 mx-auto my-4 flex h-[calc(100vh-2rem)] w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
@@ -16,12 +18,19 @@ export default function Home() {
             <div> Search:</div>
             <input className="border-border border" placeholder="Search for a character:"></input>
           </div>
-          <button
-            className="border-border bg-accent text-text w-64 rounded border"
-            onClick={() => setIsCreate(true)}
-          >
-            Add Character
-          </button>
+          {loggedIn && (
+            <button
+              className="border-border bg-accent text-text w-64 cursor-pointer rounded border"
+              onClick={() => setIsCreate(true)}
+            >
+              Add Character
+            </button>
+          )}
+          {!loggedIn && (
+            <p className="border-border bg-accent text-text w-64 cursor-not-allowed rounded border text-center">
+              Log in to add your own characters
+            </p>
+          )}
         </div>
         <Grid characters={characters} />
         {isCreate && <CharacterMaker addCharacter={addCharacter} setIsCreate={setIsCreate} />}

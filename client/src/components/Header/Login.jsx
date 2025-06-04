@@ -11,5 +11,12 @@ export default function Login() {
     }
   };
 
-  return <button onClick={handleLogin}>Login</button>;
+  return (
+    <button
+      className="border-border bg-accent text-text w-24 cursor-pointer rounded border p-2"
+      onClick={handleLogin}
+    >
+      Login
+    </button>
+  );
 }
