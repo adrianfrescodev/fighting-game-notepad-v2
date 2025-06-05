@@ -1,27 +1,57 @@
 import { useState, useEffect } from 'react';
-
+import { useAuth } from '../context/AuthContext';
 function useCharacterNotes(name) {
   const noteTemplate = {
     general: '',
     combos: '',
     'key-moves': '',
   };
-  const [hasLoaded, setHasLoaded] = useState(false);
-
+  const { token } = useAuth();
+  const [noteReady, setNoteReady] = useState(false);
   const [notes, setNotes] = useState(noteTemplate);
-
   useEffect(() => {
-    const loaded = loadNotes();
-    if (loaded) {
-      setNotes(loaded);
+    const local = loadNotes();
+    if (local) {
+      setNotes(local);
     }
-    setHasLoaded(true);
-    // eslint-disable-next-line
-  }, [name]);
 
+    const init = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notes/${name}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.status === 404) {
+          await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notes/${name}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              sections: noteTemplate,
+            }),
+          });
+          setNotes(noteTemplate);
+        } else if (res.ok) {
+          const data = await res.json();
+          setNotes(data.sections);
+        }
+      } catch (err) {
+        console.error('Failed to load or initialize note:', err);
+      }
+
+      setNoteReady(true);
+    };
+
+    if (token) init();
+  }, [name, token]);
   useEffect(() => {
-    if (hasLoaded) {
+    if (noteReady) {
       saveNotes();
+      if (token) {
+        saveNotesToDB();
+      }
     }
     // eslint-disable-next-line
   }, [notes]);
@@ -38,6 +68,18 @@ function useCharacterNotes(name) {
       ...prev,
       [section]: newContent,
     }));
+  }
+  async function saveNotesToDB() {
+    try {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notes/${name}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ sections: notes }),
+      });
+    } catch (err) {
+      console.error('Failed to save note to server:', err);
+      return false;
+    }
   }
   return { notes, setNotes, saveNotes, loadNotes, updateNotes };
 }
