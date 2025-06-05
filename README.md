@@ -20,4 +20,4 @@ It allows players to create, organize, and navigate notes for their favorite cha
 
 ## Site is live!
 
--https://fighting-game-notepad.vercel.app/
+- https://fighting-game-notepad.vercel.app/
