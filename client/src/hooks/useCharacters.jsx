@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 function useCharacters() {
   const [characters, setCharacters] = useState([]);
-  const { token } = useAuth();
+  const { token, loggedIn } = useAuth();
 
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
+        if (!loggedIn || !token) return;
         const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/characters`, {
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         });
@@ -21,7 +22,7 @@ function useCharacters() {
       }
     };
     fetchCharacters();
-  }, [token]);
+  }, [token, loggedIn]);
 
   const addCharacter = async newName => {
     const trimmed = newName.trim().toLowerCase();

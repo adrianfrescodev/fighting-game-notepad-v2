@@ -6,7 +6,7 @@ function useCharacterNotes(name) {
     combos: '',
     'key-moves': '',
   };
-  const { token } = useAuth();
+  const { token, loggedIn } = useAuth();
   const [noteReady, setNoteReady] = useState(false);
   const [notes, setNotes] = useState(noteTemplate);
   useEffect(() => {
@@ -44,8 +44,8 @@ function useCharacterNotes(name) {
       setNoteReady(true);
     };
 
-    if (token) init();
-  }, [name, token]);
+    if (token && loggedIn) init();
+  }, [name, token, loggedIn]);
   useEffect(() => {
     if (noteReady) {
       saveNotes();
