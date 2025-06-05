@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 function useCharacters() {
   const [characters, setCharacters] = useState([]);
-  const { token, loggedIn } = useAuth();
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        if (!loggedIn || !token) return;
         const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/characters`, {
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
         });
         const data = await res.json();
         setCharacters(
@@ -22,7 +24,7 @@ function useCharacters() {
       }
     };
     fetchCharacters();
-  }, [token, loggedIn]);
+  }, [token]);
 
   const addCharacter = async newName => {
     const trimmed = newName.trim().toLowerCase();
@@ -31,7 +33,10 @@ function useCharacters() {
     try {
       await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/characters`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ name: trimmed }),
       });
     } catch (err) {
