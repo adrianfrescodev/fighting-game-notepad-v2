@@ -13,3 +13,11 @@ It allows players to create, organize, and navigate notes for their favorite cha
 ## Tech Stack  
 - React  
 - Tailwind
+- MongoDB
+- Express
+- Node.js
+- Firebase Auth
+
+## Site is live!
+
+-https://fighting-game-notepad.vercel.app/
