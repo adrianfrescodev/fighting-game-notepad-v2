@@ -31,7 +31,7 @@ export default function About() {
             />
             <div className="flex w-full flex-1 flex-row gap-1 overflow-x-hidden overflow-y-hidden">
               {openTabs.length === 0 ? (
-                <div className="border-border bg-tile text-subheading pb-110 flex h-full w-full items-center justify-center rounded-lg border p-8 text-center text-lg">
+                <div className="border-border bg-tile text-subheading flex h-full w-full items-center justify-center rounded-lg border p-8 pb-8 text-center text-lg">
                   Select a tab to begin editing.
                 </div>
               ) : (

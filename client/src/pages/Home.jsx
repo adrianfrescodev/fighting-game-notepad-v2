@@ -9,6 +9,7 @@ export default function Home() {
   const { characters, addCharacter } = useCharacters();
   const [isCreate, setIsCreate] = useState(false);
   const { loggedIn } = useAuth();
+  const [curSearch, setCurSearch] = useState('');
   return (
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
       <div className="bg-card from-white/3 mx-auto my-4 flex h-[calc(100vh-2rem)] w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
@@ -16,7 +17,12 @@ export default function Home() {
         <div className="flex items-center justify-center gap-72 p-4">
           <div className="text-text flex gap-4">
             <div> Search:</div>
-            <input className="border-border border" placeholder="Search for a character:"></input>
+            <input
+              className="border-border border"
+              placeholder="Search for a character:"
+              value={curSearch}
+              onChange={e => setCurSearch(e.target.value)}
+            ></input>
           </div>
           {loggedIn && (
             <button
@@ -32,7 +38,12 @@ export default function Home() {
             </p>
           )}
         </div>
-        <Grid characters={characters} />
+        {console.log('Characters:', characters)};
+        <Grid
+          characters={characters.filter(name =>
+            name.toLowerCase().includes(curSearch.toLowerCase())
+          )}
+        />
         {isCreate && <CharacterMaker addCharacter={addCharacter} setIsCreate={setIsCreate} />}
         <Footer />
       </div>

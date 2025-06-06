@@ -43,7 +43,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
   try {
     const userId = req.user.uid;
     const character = await Character.findById(req.params.id);
-    if (character.user?.toString() === userId) {
+    if (character && character.user?.toString() === userId) {
       await character.deleteOne();
     }
     res.status(200).json({ message: 'Character deleted' });
