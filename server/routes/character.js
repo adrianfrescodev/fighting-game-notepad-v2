@@ -39,10 +39,10 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/', verifyToken, async (req, res) => {
   try {
     const userId = req.user.uid;
-    const character = await Character.findById(req.params.id);
+    const character = await Character.findById(req.body);
     if (character && character.user?.toString() === userId) {
       await character.deleteOne();
     }

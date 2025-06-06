@@ -5,7 +5,6 @@ export default function Login() {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      // token is handled by useAuth
     } catch (err) {
       console.error('Login error:', err.message);
     }

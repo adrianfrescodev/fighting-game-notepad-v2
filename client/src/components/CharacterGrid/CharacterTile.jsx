@@ -10,6 +10,10 @@ export default function Tile({ name }) {
         src={`/Images/${name}.png`}
         alt={name}
         className="mb-1 aspect-[4/3] w-full rounded object-cover"
+        onError={e => {
+          e.target.onerror = null;
+          e.target.src = '/Images/default.png';
+        }}
       />
       <span className="text-s text-text mt-1 font-medium capitalize">{name}</span>
     </Link>

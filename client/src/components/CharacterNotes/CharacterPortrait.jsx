@@ -4,6 +4,10 @@ export default function CharacterPortrait({ name }) {
       <img
         src={`/Images/${name}-full.png`}
         className="border-accent-hover bg-tile box-shadow h-[55vh] rounded-lg border object-contain shadow-[0_0_7px_rgba(255,255,255,0.1)]"
+        onError={e => {
+          e.target.onerror = null;
+          e.target.src = '/Images/default-full.png';
+        }}
       ></img>
       <div className="text-text mt-4 pt-4 text-center text-4xl font-bold capitalize">{name}</div>
     </div>

@@ -12,7 +12,7 @@ export default function Header() {
       </div>
 
       <div className="text-subheading mb-8 text-center text-lg font-semibold sm:text-2xl">
-        Select your character:{' '}
+        Select your character:
       </div>
     </div>
   );

@@ -81,6 +81,22 @@ function useCharacterNotes(name) {
       return false;
     }
   }
-  return { notes, setNotes, saveNotes, loadNotes, updateNotes };
+  function addTab(name) {
+    name = name.trim();
+    if (!name || notes[name]) return;
+
+    setNotes(prev => ({
+      ...prev,
+      [name]: '',
+    }));
+  }
+
+  function deleteTab(name) {
+    setNotes(prev => {
+      const { [name]: _, ...rest } = prev;
+      return rest;
+    });
+  }
+  return { notes, setNotes, saveNotes, loadNotes, updateNotes, addTab, deleteTab };
 }
 export default useCharacterNotes;

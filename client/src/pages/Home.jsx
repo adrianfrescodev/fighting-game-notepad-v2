@@ -14,11 +14,11 @@ export default function Home() {
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
       <div className="bg-card from-white/3 mx-auto my-4 flex h-[calc(100vh-2rem)] w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
         <Header />
-        <div className="flex items-center justify-center gap-72 p-4">
-          <div className="text-text flex gap-4">
+        <div className="flex items-center justify-between gap-4 px-4 py-4">
+          <div className="text-text flex gap-2">
             <div> Search:</div>
             <input
-              className="border-border border"
+              className="bg-tile border-border text-text placeholder:text-subheading rounded border px-3 py-1 text-sm"
               placeholder="Search for a character:"
               value={curSearch}
               onChange={e => setCurSearch(e.target.value)}
@@ -26,19 +26,18 @@ export default function Home() {
           </div>
           {loggedIn && (
             <button
-              className="border-border bg-accent text-text w-64 cursor-pointer rounded border"
+              className="border-border bg-accent text-text cursor-pointer rounded border px-4 py-1 text-center text-sm"
               onClick={() => setIsCreate(true)}
             >
               Add Character
             </button>
           )}
           {!loggedIn && (
-            <p className="border-border bg-accent text-text w-64 cursor-not-allowed rounded border text-center">
+            <p className="border-border bg-accent text-text cursor-not-allowed rounded border text-center">
               Log in to add your own characters
             </p>
           )}
         </div>
-        {console.log('Characters:', characters)};
         <Grid
           characters={characters.filter(name =>
             name.toLowerCase().includes(curSearch.toLowerCase())
