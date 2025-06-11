@@ -10,6 +10,7 @@ export default function Home() {
   const [isCreate, setIsCreate] = useState(false);
   const { loggedIn } = useAuth();
   const [curSearch, setCurSearch] = useState('');
+  const visibleCharacters = characters.filter(c => c.deleted !== true);
   return (
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
       <div className="bg-card from-white/3 mx-auto my-4 flex h-[calc(100vh-2rem)] w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
@@ -39,8 +40,8 @@ export default function Home() {
           )}
         </div>
         <Grid
-          characters={characters.filter(name =>
-            name.toLowerCase().includes(curSearch.toLowerCase())
+          characters={visibleCharacters.filter(c =>
+            c.name.toLowerCase().includes(curSearch.toLowerCase())
           )}
         />
         {isCreate && <CharacterMaker addCharacter={addCharacter} setIsCreate={setIsCreate} />}

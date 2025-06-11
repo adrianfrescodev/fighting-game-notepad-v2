@@ -14,7 +14,6 @@ function useCharacterNotes(name) {
     if (local) {
       setNotes(local);
     }
-
     const init = async () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notes/${name}`, {
@@ -44,7 +43,11 @@ function useCharacterNotes(name) {
       setNoteReady(true);
     };
 
-    if (token && loggedIn) init();
+    if (!token) {
+      setNoteReady(true);
+    } else if (token && loggedIn) {
+      init();
+    }
   }, [name, token, loggedIn]);
   useEffect(() => {
     if (noteReady) {

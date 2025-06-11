@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import noteRoutes from './routes/note.js';
 import characterRoutes from './routes/character.js';
+import userCharacterDataRoutes from './routes/usercharacterdata.js';
 import dotenv from 'dotenv';
 import { connectToDB } from './db/connection.js';
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use('/api/notes', noteRoutes);
 app.use('/api/characters', characterRoutes);
+app.use('/api/usercharacterdata', userCharacterDataRoutes);
 
 connectToDB();
 
