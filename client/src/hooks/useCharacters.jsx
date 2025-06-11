@@ -9,21 +9,32 @@ function useCharacters() {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const [charRes, settingsRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/characters`, {
-            headers: {
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-          }),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/usercharacterdata`, {
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-          }),
-        ]);
+        const charRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/characters`, {
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
+
         const characters = await charRes.json();
-        const settings = await settingsRes.json();
+
+        let settings = [];
+        if (token) {
+          const settingsRes = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/usercharacterdata`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (settingsRes.ok) {
+            settings = await settingsRes.json();
+          } else {
+            console.warn('Settings fetch failed:', settingsRes.status);
+          }
+        }
 
         setCharacters(characters);
         setCharacterSettings(settings);
@@ -31,12 +42,15 @@ function useCharacters() {
         console.error('Error fetching characters or settings', err);
       }
     };
+
     fetchCharacters();
   }, [token]);
 
   useEffect(() => {
     const settingsMap = new Map();
-    characterSettings.forEach(s => settingsMap.set(s.character, s));
+    if (characterSettings) {
+      characterSettings.forEach(s => settingsMap.set(s.character, s));
+    }
 
     const merged = characters.map(char => {
       const settings = settingsMap.get(char._id);
@@ -46,8 +60,14 @@ function useCharacters() {
         deleted: settings?.deleted ?? false,
       };
     });
+    const sorted = merged.sort((a, b) => {
+      if (a.favorite && !b.favorite) return -1;
+      if (!a.favorite && b.favorite) return 1;
 
-    setMergedCharacters(merged);
+      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+    });
+
+    setMergedCharacters(sorted);
   }, [characters, characterSettings]);
 
   const addCharacter = async newName => {
@@ -75,7 +95,7 @@ function useCharacters() {
     return true;
   };
 
-  return { characters: mergedCharacters, addCharacter, characterSettings };
+  return { characters: mergedCharacters, addCharacter, characterSettings, setCharacters };
 }
 
 export default useCharacters;

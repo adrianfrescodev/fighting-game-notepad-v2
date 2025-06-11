@@ -6,11 +6,29 @@ import { useState } from 'react';
 import CharacterMaker from '../components/CharacterGrid/CharacterMaker';
 import { useAuth } from '../context/AuthContext';
 export default function Home() {
-  const { characters, addCharacter } = useCharacters();
+  const { characters, addCharacter, setCharacters } = useCharacters();
   const [isCreate, setIsCreate] = useState(false);
-  const { loggedIn } = useAuth();
+  const { loggedIn, token } = useAuth();
   const [curSearch, setCurSearch] = useState('');
   const visibleCharacters = characters.filter(c => c.deleted !== true);
+  const handleToggleFavorite = async (name, isFavorite) => {
+    try {
+      setCharacters(prev =>
+        prev.map(char => (char.name === name ? { ...char, favorite: isFavorite } : char))
+      );
+
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/usercharacterdata/${name}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ favorite: isFavorite }),
+      });
+    } catch (err) {
+      console.error('Failed to toggle favorite:', err);
+    }
+  };
   return (
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
       <div className="bg-card from-white/3 mx-auto my-4 flex h-[calc(100vh-2rem)] w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
@@ -43,6 +61,7 @@ export default function Home() {
           characters={visibleCharacters.filter(c =>
             c.name.toLowerCase().includes(curSearch.toLowerCase())
           )}
+          onToggleFavorite={handleToggleFavorite}
         />
         {isCreate && <CharacterMaker addCharacter={addCharacter} setIsCreate={setIsCreate} />}
         <Footer />
