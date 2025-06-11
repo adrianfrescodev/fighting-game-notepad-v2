@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import useCharacters from '../../hooks/useCharacters';
 
 export default function Tile({
   char,

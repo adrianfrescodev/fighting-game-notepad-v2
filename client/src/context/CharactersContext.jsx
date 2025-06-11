@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-function useCharacters() {
-  const [characters, setCharacters] = useState([]);
+const CharactersContext = createContext();
+
+export function CharactersProvider({ children }) {
   const { token } = useAuth();
+  const [characters, setCharacters] = useState([]);
   const [characterSettings, setCharacterSettings] = useState([]);
   const [mergedCharacters, setMergedCharacters] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
         const charRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/characters`, {
-          headers: {
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
-
         const characters = await charRes.json();
 
         let settings = [];
@@ -33,16 +33,16 @@ function useCharacters() {
           if (settingsRes.ok) {
             settings = await settingsRes.json();
           } else {
-            console.warn('Settings fetch failed:', settingsRes.status);
+            settings = [];
           }
         }
+
         setCharacters(characters);
         setCharacterSettings(settings);
       } catch (err) {
         console.error('Error fetching characters or settings', err);
       }
     };
-
     fetchCharacters();
   }, [token]);
 
@@ -52,18 +52,19 @@ function useCharacters() {
 
     const merged = characters.map(char => {
       const settings = settingsMap.get(String(char._id));
-
       return {
         ...char,
         favorite: settings?.favorite ?? false,
         deleted: settings?.deleted ?? false,
       };
     });
+
     const sorted = merged.sort((a, b) => {
       if (a.favorite && !b.favorite) return -1;
       if (!a.favorite && b.favorite) return 1;
       return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
     });
+
     setMergedCharacters(sorted);
   }, [characters, characterSettings]);
 
@@ -92,15 +93,27 @@ function useCharacters() {
     return true;
   };
 
-  return {
-    characters: mergedCharacters,
-    addCharacter,
-    characterSettings,
-    setCharacters,
-    setCharacterSettings,
-    isDeleting,
-    setIsDeleting,
-  };
+  return (
+    <CharactersContext.Provider
+      value={{
+        characters: mergedCharacters,
+        addCharacter,
+        characterSettings,
+        setCharacters,
+        setCharacterSettings,
+        isDeleting,
+        setIsDeleting,
+      }}
+    >
+      {children}
+    </CharactersContext.Provider>
+  );
 }
 
-export default useCharacters;
+export function useCharacters() {
+  const context = useContext(CharactersContext);
+  if (!context) {
+    throw new Error('useCharacters must be used within a CharactersProvider');
+  }
+  return context;
+}

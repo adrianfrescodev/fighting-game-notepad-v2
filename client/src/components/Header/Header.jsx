@@ -3,7 +3,6 @@ import Logout from './Logout';
 import { useAuth } from '../../context/AuthContext';
 export default function Header() {
   const { loggedIn } = useAuth();
-
   return (
     <div>
       {loggedIn ? <Logout /> : <Login />}

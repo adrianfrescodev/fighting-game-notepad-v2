@@ -1,7 +1,7 @@
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import Grid from '../components/CharacterGrid/CharacterGrid';
-import useCharacters from '../hooks/useCharacters';
+import { useCharacters } from '../context/CharactersContext';
 import { useState } from 'react';
 import CharacterMaker from '../components/CharacterGrid/CharacterMaker';
 import { useAuth } from '../context/AuthContext';
@@ -76,14 +76,14 @@ export default function Home() {
             ></input>
           </div>
           <div className="flex flex-row gap-8">
-            {!isDeleting && (
+            {!isDeleting && loggedIn && (
               <button
                 className="border-border bg-accent text-text cursor-pointer rounded border px-4 py-1 text-center text-sm"
                 onClick={() => setIsCreate(true)}
               >
                 Add Character
               </button>
-            )}{' '}
+            )}
             {!loggedIn && (
               <p className="border-border bg-accent text-text cursor-not-allowed rounded border text-center">
                 Log in to add your own characters

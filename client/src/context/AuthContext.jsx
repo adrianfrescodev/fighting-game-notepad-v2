@@ -1,13 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { onIdTokenChanged } from 'firebase/auth';
 import { auth } from '../services/firebaseClient';
-
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async user => {
       if (user) {
