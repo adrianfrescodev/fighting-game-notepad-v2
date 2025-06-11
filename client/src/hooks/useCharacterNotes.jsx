@@ -8,7 +8,7 @@ function useCharacterNotes(name) {
   };
   const { token, loggedIn } = useAuth();
   const [noteReady, setNoteReady] = useState(false);
-  const [notes, setNotes] = useState(noteTemplate);
+  const [notes, setNotes] = useState({});
   useEffect(() => {
     const local = loadNotes();
     if (local) {
@@ -27,17 +27,17 @@ function useCharacterNotes(name) {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-              sections: noteTemplate,
-            }),
+            body: JSON.stringify({ sections: noteTemplate }),
           });
           setNotes(noteTemplate);
         } else if (res.ok) {
           const data = await res.json();
-          setNotes(data.sections);
+          setNotes(data.sections || {});
+        } else {
+          console.error(`Unexpected error: ${res.statusText}`);
         }
       } catch (err) {
-        console.error('Failed to load or initialize note:', err);
+        console.error('Failed to load or initialize notes:', err);
       }
 
       setNoteReady(true);

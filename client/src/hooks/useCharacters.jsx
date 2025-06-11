@@ -6,6 +6,7 @@ function useCharacters() {
   const { token } = useAuth();
   const [characterSettings, setCharacterSettings] = useState([]);
   const [mergedCharacters, setMergedCharacters] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
@@ -35,7 +36,6 @@ function useCharacters() {
             console.warn('Settings fetch failed:', settingsRes.status);
           }
         }
-
         setCharacters(characters);
         setCharacterSettings(settings);
       } catch (err) {
@@ -48,12 +48,11 @@ function useCharacters() {
 
   useEffect(() => {
     const settingsMap = new Map();
-    if (characterSettings) {
-      characterSettings.forEach(s => settingsMap.set(s.character, s));
-    }
+    characterSettings.forEach(s => settingsMap.set(String(s.character), s));
 
     const merged = characters.map(char => {
-      const settings = settingsMap.get(char._id);
+      const settings = settingsMap.get(String(char._id));
+
       return {
         ...char,
         favorite: settings?.favorite ?? false,
@@ -63,10 +62,8 @@ function useCharacters() {
     const sorted = merged.sort((a, b) => {
       if (a.favorite && !b.favorite) return -1;
       if (!a.favorite && b.favorite) return 1;
-
       return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
     });
-
     setMergedCharacters(sorted);
   }, [characters, characterSettings]);
 
@@ -95,7 +92,15 @@ function useCharacters() {
     return true;
   };
 
-  return { characters: mergedCharacters, addCharacter, characterSettings, setCharacters };
+  return {
+    characters: mergedCharacters,
+    addCharacter,
+    characterSettings,
+    setCharacters,
+    setCharacterSettings,
+    isDeleting,
+    setIsDeleting,
+  };
 }
 
 export default useCharacters;

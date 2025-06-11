@@ -94,7 +94,9 @@ export default function TabBar({ openTabs, openTab, closeTab, allTabs, addTab, d
       )}
 
       <button
-        className="bg-tile hover:bg-accent-hover text-text aspect-square h-full rounded-md"
+        className={`bg-tile hover:bg-accent-hover text-text rounded-md ${
+          allTabs.length ? 'aspect-square h-full' : 'min-h-4 min-w-16'
+        }`}
         onClick={() => setIsAdding(true)}
       >
         +

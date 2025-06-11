@@ -12,7 +12,7 @@ import useTab from '../hooks/useTab';
 export default function About() {
   const { name } = useParams();
   const { notes, updateNotes, addTab, deleteTab } = useCharacterNotes(name);
-  const { openTabs, closeTab, openTab } = useTab();
+  const { openTabs, closeTab, openTab, allTabs } = useTab(notes);
   return (
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
       <div className="bg-card from-white/3 mx-auto my-4 h-[calc(100vh-2rem)] w-full max-w-4xl rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
@@ -27,7 +27,7 @@ export default function About() {
               openTab={openTab}
               addTab={addTab}
               deleteTab={deleteTab}
-              allTabs={Object.keys(notes)}
+              allTabs={allTabs}
             />
             <div className="flex w-full flex-1 flex-row gap-1 overflow-x-hidden overflow-y-hidden">
               {openTabs.length === 0 ? (

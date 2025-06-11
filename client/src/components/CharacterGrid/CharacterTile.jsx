@@ -1,23 +1,49 @@
 import { Link } from 'react-router-dom';
+import useCharacters from '../../hooks/useCharacters';
 
-export default function Tile({ char, onToggleFavorite }) {
+export default function Tile({
+  char,
+  onToggleFavorite,
+  onToggleDelete,
+  isSelectedToDelete,
+  isDeleting,
+}) {
   return (
     <Link
-      to={`/character/${char.name}`}
-      className="border-border bg-tile hover:border-text flex h-full w-full cursor-pointer flex-col items-center justify-center rounded border p-1.5 text-center transition-transform duration-200 ease-in-out hover:scale-105"
+      to={isDeleting ? '#' : `/character/${char.name}`}
+      className={`border-border bg-tile hover:border-text group relative flex h-full w-full cursor-pointer flex-col items-center justify-center rounded border p-1.5 text-center transition-transform duration-200 ease-in-out hover:scale-105 ${
+        char.favorite ? 'hover:border-yellow-100' : ''
+      }`}
     >
       <div>
-        <span
-          onClick={e => {
-            e.preventDefault();
-            e.stopPropagation();
-            onToggleFavorite();
-          }}
-          className="absolute right-2 top-2 cursor-pointer text-xl"
-          title="Toggle Favorite"
-        >
-          {char.favorite ? '★' : '☆'}
-        </span>
+        {!isDeleting && (
+          <span
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleFavorite();
+            }}
+            className={`absolute right-2 top-2 cursor-pointer text-xl text-amber-300 transition-opacity ${
+              char.favorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+            }`}
+            title="Toggle Favorite"
+          >
+            {char.favorite ? '★' : '☆'}
+          </span>
+        )}
+        {isDeleting && (
+          <span
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleDelete(char._id);
+            }}
+            className={`absolute right-2 top-2 cursor-pointer text-red-500`}
+            title="Mark for Deletion"
+          >
+            {isSelectedToDelete ? '✔️' : '❌'}
+          </span>
+        )}
         <img
           src={`/Images/${char.name}.png`}
           alt={char}

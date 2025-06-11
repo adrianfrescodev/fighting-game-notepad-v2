@@ -8,20 +8,25 @@ router.get('/', async (req, res) => {
   try {
     let userId = null;
 
-    const token = req.headers.authorization?.split('Bearer ')[1];
+    const header = req.headers.authorization;
+    const token = header?.split('Bearer ')[1];
 
-    try {
-      const decoded = await admin.auth().verifyIdToken(token);
-      userId = decoded.uid;
-    } catch (err) {
-      console.warn('Invalid token:', err.message);
+    if (token) {
+      try {
+        const decoded = await admin.auth().verifyIdToken(token);
+        userId = decoded.uid;
+      } catch (err) {
+        console.warn('Invalid token:', err.message);
+      }
     }
+
     const characters = await Character.find({
       $or: [{ user: null }, ...(userId ? [{ user: userId }] : [])],
     });
 
     res.status(200).json(characters);
   } catch (err) {
+    console.error('Server error fetching characters:', err.message);
     res.status(500).json({ message: 'Error fetching characters' });
   }
 });
@@ -42,7 +47,8 @@ router.post('/', verifyToken, async (req, res) => {
 router.delete('/', verifyToken, async (req, res) => {
   try {
     const userId = req.user.uid;
-    const character = await Character.findById(req.body);
+    const { _id } = req.body;
+    const character = await Character.findById(_id);
     if (character && character.user?.toString() === userId) {
       await character.deleteOne();
     }
