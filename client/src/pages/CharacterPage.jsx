@@ -49,6 +49,7 @@ export default function About() {
           <div className="col-span-1 row-span-7 hidden sm:flex">
             <CharacterPortrait name={name} />
           </div>
+
           <div className="col-span-3 row-span-1">
             <Footer />
           </div>
