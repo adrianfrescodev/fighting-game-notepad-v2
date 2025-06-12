@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { useAuth } from '../../context/AuthContext';
 export default function Tile({
   char,
   onToggleFavorite,
@@ -7,6 +7,7 @@ export default function Tile({
   isSelectedToDelete,
   isDeleting,
 }) {
+  const { loggedIn } = useAuth();
   return (
     <Link
       to={isDeleting ? '#' : `/character/${char.name}`}
@@ -15,7 +16,7 @@ export default function Tile({
       }`}
     >
       <div>
-        {!isDeleting && (
+        {!isDeleting && loggedIn && (
           <span
             onClick={e => {
               e.preventDefault();

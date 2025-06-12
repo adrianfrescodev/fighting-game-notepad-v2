@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="text-subheading border-border mt-8 border-t pt-3 text-center text-xs">
+    <div className="text-subheading border-border border-t pt-3 text-center text-xs">
       <a
         href="https://github.com/adrianfrescodev"
         target="_blank"

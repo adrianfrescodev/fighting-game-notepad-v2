@@ -67,7 +67,7 @@ export default function NoteEditor({ section, value, onChange }) {
       </div>
       <EditorContent
         editor={editor}
-        className="editor-container text-text mt-0 flex-1 overflow-x-hidden overflow-y-auto bg-transparent p-3 pr-1 text-base leading-1.5 break-words"
+        className="editor-container text-text leading-1.5 mt-0 flex-1 overflow-y-auto overflow-x-hidden break-words break-all bg-transparent p-3 pr-1 text-base"
       />
       <NoteBubbleMenu editor={editor} />
     </div>

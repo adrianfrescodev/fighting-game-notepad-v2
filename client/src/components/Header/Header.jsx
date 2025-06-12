@@ -6,11 +6,11 @@ export default function Header() {
   return (
     <div>
       {loggedIn ? <Logout /> : <Login />}
-      <div className="text-text border-border my-6 border-b py-3 text-center text-2xl font-bold sm:text-4xl">
+      <div className="text-text border-border border-b py-3 text-center text-2xl font-bold sm:my-6 sm:text-4xl">
         Welcome to The Fighting Game Notepad
       </div>
 
-      <div className="text-subheading mb-8 text-center text-lg font-semibold sm:text-2xl">
+      <div className="text-subheading text-center text-lg font-semibold sm:mb-8 sm:text-2xl">
         Select your character:
       </div>
     </div>

@@ -6,11 +6,11 @@ export default function TabBar({ openTabs, openTab, closeTab, allTabs, addTab, d
   const [isDeleting, setIsDeleting] = useState(false);
   const [tabToDelete, setTabToDelete] = useState(null);
   return (
-    <div className="flex flex-row content-center justify-center gap-1 overflow-x-auto px-2 pb-1">
+    <div className="flex flex-row content-center justify-center gap-1 overflow-x-auto px-2 pb-1 pt-1">
       {allTabs.map(tab => (
         <button
           key={tab}
-          className={`group relative flex min-w-0 flex-1 items-center justify-center gap-2 rounded-md px-3 py-1 text-center transition ${
+          className={`group relative flex min-w-0 flex-1 cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 text-center transition ${
             openTabs.includes(tab)
               ? 'bg-accent-hover text-text font-semibold'
               : 'text-subheading hover:bg-accent-hover bg-tile'
@@ -28,7 +28,7 @@ export default function TabBar({ openTabs, openTab, closeTab, allTabs, addTab, d
           </span>
 
           <span
-            className="text-muted hidden text-xs text-gray-50 hover:text-red-500 group-hover:inline"
+            className="text-muted inline text-xs text-gray-50 hover:text-red-500 group-hover:inline sm:hidden"
             onClick={e => {
               e.stopPropagation();
               setTabToDelete(tab);
@@ -41,7 +41,7 @@ export default function TabBar({ openTabs, openTab, closeTab, allTabs, addTab, d
       ))}
       {isDeleting && (
         <div className="z-9999 fixed inset-0 flex w-full items-center justify-center bg-[rgba(0,0,0,0.5)]">
-          <div className="bg-tile border-border z-9999 fixed grid h-[20%] w-[20%] grid-cols-2 grid-rows-2 rounded border p-4">
+          <div className="bg-tile border-border z-9999 fixed grid grid-cols-2 grid-rows-2 rounded border p-4 sm:h-[20%] sm:w-[20%]">
             <div className="text-1xl text-text col-span-2 row-span-1 flex items-center justify-center font-extrabold">
               Are you sure you want to delete {tabToDelete}?
             </div>
@@ -92,15 +92,17 @@ export default function TabBar({ openTabs, openTab, closeTab, allTabs, addTab, d
           }}
         />
       )}
-
-      <button
-        className={`bg-tile hover:bg-accent-hover text-text rounded-md ${
-          allTabs.length ? 'aspect-square h-full' : 'min-h-4 min-w-16'
-        }`}
-        onClick={() => setIsAdding(true)}
-      >
-        +
-      </button>
+      {!isAdding && (
+        <button
+          className={`bg-tile hover:bg-accent-hover text-text cursor-pointer rounded-md ${
+            allTabs.length ? 'aspect-square h-full' : 'min-h-4 min-w-16'
+          }`}
+          title="Add a Character"
+          onClick={() => setIsAdding(true)}
+        >
+          +
+        </button>
+      )}
     </div>
   );
 }

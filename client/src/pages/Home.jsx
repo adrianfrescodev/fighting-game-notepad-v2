@@ -63,29 +63,29 @@ export default function Home() {
   const isSelectedToDelete = id => selectedToDelete.includes(id);
   return (
     <div className="bg-background flex h-screen w-full items-center justify-center overflow-hidden">
-      <div className="bg-card from-white/3 mx-auto my-4 flex h-[calc(100vh-2rem)] w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)]">
+      <div className="bg-card from-white/3 mx-auto my-4 flex h-full w-full max-w-4xl flex-col rounded-[10px] bg-gradient-to-tr via-transparent via-50% p-6 shadow-[0_0_12px_rgba(0,0,0,0.2)] sm:h-[calc(100vh-2rem)]">
         <Header />
-        <div className="flex items-center justify-between gap-4 px-4 py-4">
-          <div className="text-text flex gap-2">
+        <div className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-text flex w-full flex-col gap-1 sm:w-auto sm:flex-row sm:items-center sm:gap-2">
             <div> Search:</div>
             <input
-              className="bg-tile border-border text-text placeholder:text-subheading rounded border px-3 py-1 text-sm"
+              className="bg-tile border-border text-text placeholder:text-subheading w-full flex-1 rounded border px-3 py-1 text-sm sm:w-auto"
               placeholder="Search for a character:"
               value={curSearch}
               onChange={e => setCurSearch(e.target.value)}
             ></input>
           </div>
-          <div className="mr-2 flex flex-row gap-3">
+          <div className="flex flex-row gap-3 sm:mr-2">
             {!isDeleting && loggedIn && (
               <button
-                className="border-border bg-accent text-text cursor-pointer rounded border px-4 py-1 text-center text-sm"
+                className="border-border bg-accent text-text w-full cursor-pointer rounded border px-4 py-1 text-center text-sm sm:w-auto"
                 onClick={() => setIsCreate(true)}
               >
                 Add Character
               </button>
             )}
             {!loggedIn && (
-              <p className="border-border bg-accent text-text cursor-not-allowed rounded border text-center">
+              <p className="border-border bg-accent text-text w-full cursor-default rounded border px-4 py-1 text-center text-sm sm:w-auto">
                 Log in to add your own characters
               </p>
             )}
