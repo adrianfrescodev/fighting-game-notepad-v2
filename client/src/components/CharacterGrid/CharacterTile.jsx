@@ -44,12 +44,12 @@ export default function Tile({
           </span>
         )}
         <img
-          src={`/Images/${char.name}.png`}
+          src={`/Images/${char.name}.webp`}
           alt={char}
           className="mb-1 aspect-[4/3] w-full rounded object-cover"
           onError={e => {
             e.target.onerror = null;
-            e.target.src = '/Images/default.png';
+            e.target.src = '/Images/default.webp';
           }}
         />
       </div>

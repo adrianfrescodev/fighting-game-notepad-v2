@@ -64,7 +64,7 @@ export default function CharacterDeletePanel({
           setSelectedToDelete([]);
           setIsDeleting(prev => !prev);
         }}
-        className="rounded bg-red-400 px-2 py-1 text-white"
+        className="cursor-pointer rounded bg-red-500 px-2 py-1 text-sm text-white"
       >
         {isDeleting ? 'Cancel Delete' : 'Delete Characters'}
       </button>
@@ -93,14 +93,17 @@ export default function CharacterDeletePanel({
               console.error('Error restoring characters:', err);
             }
           }}
-          className="rounded bg-blue-500 px-3 py-1 text-white"
+          className="cursor-pointer rounded bg-blue-500 px-2 py-1 text-sm text-white"
         >
           Restore All Characters
         </button>
       )}
 
       {isDeleting && (
-        <button onClick={handleBulkDelete} className="rounded bg-red-600 px-2 py-1 text-white">
+        <button
+          onClick={handleBulkDelete}
+          className="cursor-pointer rounded bg-red-600 px-2 py-1 text-sm text-white"
+        >
           Delete
         </button>
       )}

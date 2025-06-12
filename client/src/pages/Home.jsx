@@ -75,7 +75,7 @@ export default function Home() {
               onChange={e => setCurSearch(e.target.value)}
             ></input>
           </div>
-          <div className="flex flex-row gap-8">
+          <div className="mr-2 flex flex-row gap-3">
             {!isDeleting && loggedIn && (
               <button
                 className="border-border bg-accent text-text cursor-pointer rounded border px-4 py-1 text-center text-sm"
