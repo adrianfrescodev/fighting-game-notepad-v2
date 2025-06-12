@@ -6,9 +6,11 @@ It allows players to create, organize, and navigate notes for their favorite cha
 
 ## Features  
 - Custom character creator  
-- Display multiple tabs at once  
-- Save notes across devices  
-- Mobile-friendly UI  
+- Multi-tab display 
+- Cross-device note saving
+- Mobile-friendly UI
+- Ability to favorite characters
+- Character and tab deletion
 
 ## Tech Stack  
 - React  
