@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 function useCharacterNotes(name) {
   const noteTemplate = {
@@ -9,6 +9,7 @@ function useCharacterNotes(name) {
   const { token, loggedIn } = useAuth();
   const [noteReady, setNoteReady] = useState(false);
   const [notes, setNotes] = useState({});
+  const saveTimer = useRef(null);
   useEffect(() => {
     const local = loadNotes();
     if (local) {
@@ -50,14 +51,21 @@ function useCharacterNotes(name) {
     }
   }, [name, token, loggedIn]);
   useEffect(() => {
-    if (noteReady) {
-      saveNotes();
-      if (token) {
+    if (!noteReady) return;
+
+    saveNotes();
+
+    if (token) {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+      saveTimer.current = setTimeout(() => {
         saveNotesToDB();
-      }
+      }, 500);
     }
-    // eslint-disable-next-line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes]);
+
+  useEffect(() => () => clearTimeout(saveTimer.current), []);
 
   function saveNotes() {
     localStorage.setItem(`notes-${name}`, JSON.stringify(notes));

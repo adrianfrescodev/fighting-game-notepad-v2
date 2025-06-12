@@ -46,7 +46,7 @@ export default function Tile({
         )}
         <img
           src={`/Images/${char.name}.webp`}
-          alt={char}
+          alt={char.name}
           className="mb-1 aspect-[4/3] w-full rounded object-cover"
           onError={e => {
             e.target.onerror = null;
